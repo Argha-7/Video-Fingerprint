@@ -8,7 +8,10 @@ FFMPEG_PATH = "ffmpeg"
 def download_youtube_video(url, output_path):
     print(f"--- Downloading Video ---")
     command = [
-        'python', '-m', 'yt_dlp', '-f', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best', 
+        'python', '-m', 'yt_dlp', 
+        '--no-check-certificate',
+        '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+        '-f', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best', 
         '--merge-output-format', 'mp4', '--output', output_path, url
     ]
     print(f"Running: {' '.join(command)}")
