@@ -33,29 +33,16 @@ jobs:
 
       - name: Modify Video Fingerprint
         run: |
-          # We use a non-interactive way to run the script
-          python -c "
-          from modify_fingerprint import download_youtube_video, process_video
-          import os
-
-          url = '${{ github.event.inputs.video_url }}'
-          original_video = 'original_video.mp4'
-          modified_video = 'modified_video.mp4'
-
-          print(f'Processing URL: {url}')
-          actual_path = download_youtube_video(url, original_video)
-          process_video(actual_path, modified_video)
-          "
+          python github_runner.py "${{ github.event.inputs.video_url }}"
 
       - name: Create Release and Upload Asset
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Delete existing "latest" release if it exists
+          # Ensure we are on a clean state for the tag
           gh release delete latest --yes || true
-          git tag -d latest || true
-          git push --delete origin latest || true
+          git push origin :refs/tags/latest || true
           
-          # Create new "latest" release and upload the video
-          gh release create latest modified_video.mp4 --title "Latest Modification" --notes "Uploaded via GitHub Actions"
+          # Create nre release with asset
+          gh release create latest modified_video.mp4 --title "Latest Video" --notes "Fingerprint modified on $(date)"
 

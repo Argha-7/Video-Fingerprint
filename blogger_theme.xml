@@ -180,11 +180,11 @@
                     </div>
 
                     <script type='text/javascript'>
-                    //                        <![CDATA[
+                    //                                                                        <![CDATA[
                     (function() {
                         /* CONFIGURATION - Edit these values */
-                        const GITHUB_USER = 'YOUR_GITHUB_USERNAME';
-                        const GITHUB_REPO = 'video_fingerprint';
+                        const GITHUB_USER = 'Argha-7';
+                        const GITHUB_REPO = 'Video-Fingerprint';
                         const GITHUB_TOKEN = 'YOUR_GITHUB_TOKEN';
                         /* -------------------------------- */
 
