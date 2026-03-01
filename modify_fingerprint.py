@@ -7,18 +7,32 @@ FFMPEG_PATH = "ffmpeg"
 
 def download_youtube_video(url, output_path):
     print(f"--- Downloading Video ---")
-    command = [
+    
+    # Attempt 1: Aggressive Bypass (Best for GitHub Actions)
+    command_bypass = [
         'python', '-m', 'yt_dlp', 
         '--no-check-certificate',
         '--no-cache-dir',
         '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
         '--extractor-args', 'youtube:player_client=android,web', 
-        '--client-name', 'android',
         '-f', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best', 
         '--merge-output-format', 'mp4', '--output', output_path, url
     ]
-    print(f"Running: {' '.join(command)}")
-    subprocess.run(command, check=True)
+    
+    # Attempt 2: Simple/Compatible (Best for Local/Windows)
+    command_simple = [
+        'python', '-m', 'yt_dlp', 
+        '--no-check-certificate',
+        '-f', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best', 
+        '--merge-output-format', 'mp4', '--output', output_path, url
+    ]
+    
+    try:
+        print(f"Attempting download with bypass parameters...")
+        subprocess.run(command_bypass, check=True)
+    except subprocess.CalledProcessError:
+        print(f"Bypass download failed. Retrying with simpler parameters...")
+        subprocess.run(command_simple, check=True)
     
     if os.path.exists(output_path):
         return os.path.abspath(output_path)
@@ -69,13 +83,11 @@ def process_video(video_path, output_video_path):
             # - tremolo=f=3:d=0.1: Subtle volume modulation
             # - apulsator=hz=0.05:amount=0.03: Digital watermark (phase oscillation)
             # - firequalizer: High frequency digital noise
-            # - volume='1.0+0.02*sin(2*PI*t/1)': Changes volume EVERY SECOND dynamically
             audio_filters = (
                 'atempo=1.05,asetrate=44100*1.008,aresample=44100,'
                 'chorus=0.5:0.9:50:0.4:0.25:2,tremolo=f=3:d=0.1,'
                 'apulsator=hz=0.05:amount=0.03,'
-                'firequalizer=gain="if(gt(f,15000),rd(1,5),0)",'
-                'volume=\'1.0+0.02*sin(2*PI*t/1.0)\':eval=frame'
+                'firequalizer=gain_entry=\'entry(15000,5);entry(20000,5)\''
             )
             video_filters = 'scale=iw*1.05:-1,crop=iw/1.05:ih/1.05,eq=brightness=0.02:contrast=1.05'
             
