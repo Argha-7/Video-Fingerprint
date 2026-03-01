@@ -69,7 +69,14 @@ def process_video(video_path, output_video_path):
             # - tremolo=f=3:d=0.1: Subtle volume modulation
             # - apulsator=hz=0.05:amount=0.03: Digital watermark (phase oscillation)
             # - firequalizer: High frequency digital noise
-            audio_filters = 'atempo=1.05,asetrate=44100*1.008,aresample=44100,chorus=0.5:0.9:50:0.4:0.25:2,tremolo=f=3:d=0.1,apulsator=hz=0.05:amount=0.03,firequalizer=gain="if(gt(f,15000),rd(1,5),0)"'
+            # - volume='1.0+0.02*sin(2*PI*t/1)': Changes volume EVERY SECOND dynamically
+            audio_filters = (
+                'atempo=1.05,asetrate=44100*1.008,aresample=44100,'
+                'chorus=0.5:0.9:50:0.4:0.25:2,tremolo=f=3:d=0.1,'
+                'apulsator=hz=0.05:amount=0.03,'
+                'firequalizer=gain="if(gt(f,15000),rd(1,5),0)",'
+                'volume=\'1.0+0.02*sin(2*PI*t/1.0)\':eval=frame'
+            )
             video_filters = 'scale=iw*1.05:-1,crop=iw/1.05:ih/1.05,eq=brightness=0.02:contrast=1.05'
             
             transform_cmd = [
