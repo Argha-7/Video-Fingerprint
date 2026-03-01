@@ -10,7 +10,10 @@ def download_youtube_video(url, output_path):
     command = [
         'python', '-m', 'yt_dlp', 
         '--no-check-certificate',
+        '--no-cache-dir',
         '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+        '--extractor-args', 'youtube:player_client=android,web', 
+        '--client-name', 'android',
         '-f', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best', 
         '--merge-output-format', 'mp4', '--output', output_path, url
     ]
