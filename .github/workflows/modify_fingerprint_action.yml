@@ -7,6 +7,16 @@ on:
         description: 'YouTube Video URL'
         required: true
         type: string
+      vocal_mask:
+        description: 'Vocal Masking (Inaudible)'
+        required: false
+        type: boolean
+        default: false
+      harmonic_alter:
+        description: 'Harmonic Alteration (Voice Mutation)'
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   modify-fingerprint:
@@ -33,7 +43,10 @@ jobs:
 
       - name: Modify Video Fingerprint
         run: |
-          python github_runner.py "${{ github.event.inputs.video_url }}"
+          ARGS="${{ github.event.inputs.video_url }}"
+          if [ "${{ github.event.inputs.vocal_mask }}" = "true" ]; then ARGS="$ARGS --vocal-mask"; fi
+          if [ "${{ github.event.inputs.harmonic_alter }}" = "true" ]; then ARGS="$ARGS --harmonic-alter"; fi
+          python github_runner.py $ARGS
 
       - name: Create Release and Upload Asset
         env:
