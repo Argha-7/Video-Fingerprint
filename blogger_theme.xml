@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html b:css='true' b:defaultmessages='false' b:layoutsVersion='3' b:responsive='true'
+    xmlns='http://www.w3.org/1999/xhtml'
+    xmlns:b='http://www.google.com/2005/gml/b'
+    xmlns:data='http://www.google.com/2005/gml/data'
+    xmlns:expr='http://www.google.com/2005/gml/expr'>
+    <head>
+        <meta charset='UTF-8'/>
+        <meta content='width=device-width, initial-scale=1.0' name='viewport'/>
+        <title>
+            <data:blog.title/>
+        </title>
+
+        <!-- Google Fonts -->
+        <link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&amp;display=swap' rel='stylesheet'/>
+
+        <b:skin><![CDATA[
+        /* Required for Blogger */
+    ]]>        </b:skin>
+
+        <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-glow: rgba(79, 70, 229, 0.4);
+            --accent: #0ea5e9;
+            --bg: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Outfit', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(79, 70, 229, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, rgba(14, 165, 233, 0.15) 0%, transparent 40%);
+            background-attachment: fixed;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            padding: 2rem;
+            animation: fadeIn 0.8s ease-out;
+            z-index: 10;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 32px;
+            padding: 3rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            background: linear-gradient(to right, #818cf8, #38bdf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 2rem;
+            letter-spacing: -0.02em;
+        }
+
+        .input-group { margin-bottom: 1.5rem; text-align: left; }
+        label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 600; }
+        
+        input { 
+            width: 100%; 
+            background: rgba(15, 23, 42, 0.6); 
+            border: 1px solid rgba(255, 255, 255, 0.15); 
+            border-radius: 16px; 
+            padding: 1rem 1.25rem; 
+            color: #fff; 
+            outline: none; 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 1rem;
+        }
+        
+        input:focus { 
+            border-color: var(--primary); 
+            box-shadow: 0 0 0 4px var(--primary-glow);
+            background: rgba(15, 23, 42, 0.8);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border: none;
+            border-radius: 16px;
+            padding: 1.25rem 2rem;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
+            margin-top: 1rem;
+            width: 100%;
+            font-size: 1.1rem;
+        }
+
+        .btn-primary:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 20px 25px -5px rgba(79, 70, 229, 0.4);
+            filter: brightness(1.1);
+        }
+        
+        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+        .status-container { margin-top: 2.5rem; background: rgba(15, 23, 42, 0.4); border-radius: 20px; padding: 2rem; display: none; border: 1px solid rgba(255, 255, 255, 0.05); text-align: left; }
+        .status-item { display: flex; align-items: center; margin-bottom: 1.25rem; font-size: 1rem; color: #e2e8f0; }
+        .status-dot { width: 12px; height: 12px; border-radius: 50%; margin-right: 15px; background: #334155; flex-shrink: 0; }
+        .status-dot.active { background: var(--accent); box-shadow: 0 0 15px var(--accent); animation: pulse 1.5s infinite; }
+        .status-dot.completed { background: #10b981; box-shadow: 0 0 10px rgba(16, 185, 129, 0.3); }
+
+        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.4); opacity: 0.5; } 100% { transform: scale(1); opacity: 1; } }
+
+        .download-box { margin-top: 2.5rem; text-align: center; display: none; animation: fadeIn 0.5s ease-out; }
+        .download-btn { display: inline-block; background: #10b981; color: white; text-decoration: none; padding: 1.25rem 3rem; border-radius: 16px; font-weight: 600; transition: all 0.3s; box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3); font-size: 1.1rem; }
+        .download-btn:hover { background: #059669; transform: scale(1.05); }
+
+        #error-msg { color: #f87171; font-size: 0.9rem; margin-top: 1.5rem; display: none; padding: 1rem; background: rgba(239, 68, 68, 0.1); border-radius: 12px; border: 1px solid rgba(239, 68, 68, 0.2); }
+        </style>
+    </head>
+    <body>
+        <b:section id='main-section' maxwidgets='1' showaddelement='no'>
+            <b:widget id='Blog1' locked='true' title='Blog Posts' type='Blog' visible='true'>
+                <b:includable id='main'>
+                    <div class='container'>
+                        <div class='glass-card'>
+                            <h1>Video Fingerprint Pro</h1>
+
+                            <div class='main-content'>
+                                <div class='input-group'>
+                                    <label>YouTube Video URL</label>
+                                    <input id='video-url' placeholder='Paste YouTube link here...' type='text'/>
+                                </div>
+                                <button class='btn-primary' id='start-btn'>Modify Fingerprint</button>
+
+                                <div id='error-msg'></div>
+
+                                <div class='status-container' id='status-panel'>
+                                    <div class='status-item' id='step-trigger'>
+                                        <div class='status-dot'></div>
+                                        <span>Initiating Server...</span>
+                                    </div>
+                                    <div class='status-item' id='step-process'>
+                                        <div class='status-dot'></div>
+                                        <span>Applying Modification...</span>
+                                    </div>
+                                    <div class='status-item' id='step-upload'>
+                                        <div class='status-dot'></div>
+                                        <span>Generating Link...</span>
+                                    </div>
+                                </div>
+
+                                <div class='download-box' id='download-panel'>
+                                    <p style='margin-bottom: 1.5rem; font-size: 1.1rem; color: #10b981; font-weight: 600;'>✅ Your video is ready!</p>
+                                    <a class='download-btn' href='#' id='dl-link'>Download Now</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script type='text/javascript'>
+                    //                        <![CDATA[
+                    (function() {
+                        /* CONFIGURATION - Edit these values */
+                        const GITHUB_USER = 'YOUR_GITHUB_USERNAME';
+                        const GITHUB_REPO = 'video_fingerprint';
+                        const GITHUB_TOKEN = 'YOUR_GITHUB_TOKEN';
+                        /* -------------------------------- */
+
+                        const startBtn = document.getElementById('start-btn');
+                        const statusPanel = document.getElementById('status-panel');
+                        const downloadPanel = document.getElementById('download-panel');
+                        const errorMsg = document.getElementById('error-msg');
+
+                        const steps = {
+                            trigger: document.getElementById('step-trigger'),
+                            process: document.getElementById('step-process'),
+                            upload: document.getElementById('step-upload')
+                        };
+
+                        function updateStep(stepId, state) {
+                            const step = steps[stepId];
+                            if (!step) return;
+                            const dot = step.querySelector('.status-dot');
+                            dot.className = 'status-dot ' + state;
+                        }
+
+                        if (startBtn) {
+                            startBtn.addEventListener('click', async () => {
+                                const url = document.getElementById('video-url').value.trim();
+
+                                if (!url) {
+                                    alert('Please paste a YouTube URL!');
+                                    return;
+                                }
+
+                                if (GITHUB_USER === 'YOUR_GITHUB_USERNAME' || GITHUB_TOKEN === 'YOUR_GITHUB_TOKEN') {
+                                    alert('Error: Admin hasn\'t configured GitHub credentials in the theme code yet.');
+                                    return;
+                                }
+
+                                errorMsg.style.display = 'none';
+                                downloadPanel.style.display = 'none';
+                                statusPanel.style.display = 'block';
+                                startBtn.disabled = true;
+                                updateStep('trigger', 'active');
+                                updateStep('process', '');
+                                updateStep('upload', '');
+
+                                try {
+                                    const triggerUrl = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/actions/workflows/modify_fingerprint_action.yml/dispatches`;
+                                    const response = await fetch(triggerUrl, {
+                                        method: 'POST',
+                                        headers: {
+                                            'Authorization': `Bearer ${GITHUB_TOKEN}`,
+                                            'Accept': 'application/vnd.github+json',
+                                            'Content-Type': 'application/json'
+                                        },
+                                        body: JSON.stringify({ ref: 'main', inputs: { video_url: url } })
+                                    });
+
+                                    if (!response.ok) {
+                                        const errorData = await response.json().catch(() => ({}));
+                                        throw new Error('Server Error: ' + (errorData.message || response.statusText));
+                                    }
+
+                                    updateStep('trigger', 'completed');
+                                    updateStep('process', 'active');
+
+                                    pollStatus(GITHUB_USER, GITHUB_REPO, GITHUB_TOKEN);
+                                } catch (err) {
+                                    errorMsg.innerText = err.message;
+                                    errorMsg.style.display = 'block';
+                                    startBtn.disabled = false;
+                                }
+                            });
+                        }
+
+                        async function pollStatus(user, repo, token) {
+                            const runsUrl = `https://api.github.com/repos/${user}/${repo}/actions/runs?per_page=1`;
+                            const interval = setInterval(async () => {
+                                try {
+                                    const res = await fetch(runsUrl, {
+                                        headers: { 'Authorization': `Bearer ${token}` }
+                                    });
+                                    const data = await res.json();
+                                    const latestRun = data.workflow_runs[0];
+
+                                    if (latestRun && latestRun.status === 'completed') {
+                                        clearInterval(interval);
+                                        updateStep('process', 'completed');
+                                        updateStep('upload', 'completed');
+                                        const dlUrl = `https://github.com/${user}/${repo}/releases/download/latest/modified_video.mp4?t=${Date.now()}`;
+                                        document.getElementById('dl-link').href = dlUrl;
+                                        downloadPanel.style.display = 'block';
+                                        startBtn.disabled = false;
+                                    }
+                                } catch (err) {
+                                    console.error('Polling error:', err);
+                                }
+                            }, 10000);
+                        }
+                    })();
+                    //]]>
+                    </script>
+                </b:includable>
+                <b:includable id='commentPicker'/>
+                <b:includable id='commentPicker:next'/>
+                <b:includable id='comments'/>
+                <b:includable id='comments:next'/>
+                <b:includable id='feedLinks'/>
+                <b:includable id='feedLinksBody'/>
+                <b:includable id='headerByline'/>
+                <b:includable id='post'/>
+                <b:includable id='post:next'/>
+                <b:includable id='postAfterAd'/>
+                <b:includable id='postBody'/>
+                <b:includable id='postFooter'/>
+                <b:includable id='postJumpLink'/>
+                <b:includable id='postMeta'/>
+                <b:includable id='postPagination'/>
+                <b:includable id='postTitle'/>
+                <b:includable id='statusMessage'/>
+                <b:includable id='threadedComments'/>
+                <b:includable id='threadedComments:next'/>
+            </b:widget>
+        </b:section>
+    </body>
+</html>

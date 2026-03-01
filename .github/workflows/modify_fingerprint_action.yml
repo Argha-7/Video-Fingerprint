@@ -1,0 +1,61 @@
+name: Modify Video Fingerprint
+
+on:
+  workflow_dispatch:
+    inputs:
+      video_url:
+        description: 'YouTube Video URL'
+        required: true
+        type: string
+
+jobs:
+  modify-fingerprint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install yt-dlp
+
+      - name: Modify Video Fingerprint
+        run: |
+          # We use a non-interactive way to run the script
+          python -c "
+          from modify_fingerprint import download_youtube_video, process_video
+          import os
+
+          url = '${{ github.event.inputs.video_url }}'
+          original_video = 'original_video.mp4'
+          modified_video = 'modified_video.mp4'
+
+          print(f'Processing URL: {url}')
+          actual_path = download_youtube_video(url, original_video)
+          process_video(actual_path, modified_video)
+          "
+
+      - name: Create Release and Upload Asset
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Delete existing "latest" release if it exists
+          gh release delete latest --yes || true
+          git tag -d latest || true
+          git push --delete origin latest || true
+          
+          # Create new "latest" release and upload the video
+          gh release create latest modified_video.mp4 --title "Latest Modification" --notes "Uploaded via GitHub Actions"
+
