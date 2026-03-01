@@ -172,15 +172,18 @@
                                 </div>
 
                                 <div class='download-box' id='download-panel'>
-                                    <p style='margin-bottom: 1.5rem; font-size: 1.1rem; color: #10b981; font-weight: 600;'>✅ Your video is ready!</p>
-                                    <a class='download-btn' href='#' id='dl-link'>Download Now</a>
+                                    <p style='margin-bottom: 1.5rem; font-size: 1.1rem; color: #10b981; font-weight: 600;'>✅ Your files are ready!</p>
+                                    <div style='display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;'>
+                                        <a class='download-btn' href='#' id='dl-link'>Download Video (MP4)</a>
+                                        <a class='download-btn' href='#' id='dl-link-audio' style='background: #0ea5e9; box-shadow: 0 10px 15px -3px rgba(14, 165, 233, 0.3);'>Download Audio (MP3)</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <script type='text/javascript'>
-                    //                                                                                                                                                                        <![CDATA[
+                    //                                                                                                                                                                                                <![CDATA[
                     (function() {
                         /* CONFIGURATION - Edit these values */
                         const GITHUB_USER = 'Argha-7';
@@ -271,8 +274,11 @@
                                         clearInterval(interval);
                                         updateStep('process', 'completed');
                                         updateStep('upload', 'completed');
-                                        const dlUrl = `https://github.com/${user}/${repo}/releases/download/latest/modified_video.mp4?t=${Date.now()}`;
-                                        document.getElementById('dl-link').href = dlUrl;
+                                        const now = Date.now();
+                                        const dlUrlVideo = `https://github.com/${user}/${repo}/releases/download/latest/modified_video.mp4?t=${now}`;
+                                        const dlUrlAudio = `https://github.com/${user}/${repo}/releases/download/latest/modified_audio.mp3?t=${now}`;
+                                        document.getElementById('dl-link').href = dlUrlVideo;
+                                        document.getElementById('dl-link-audio').href = dlUrlAudio;
                                         downloadPanel.style.display = 'block';
                                         startBtn.disabled = false;
                                     }

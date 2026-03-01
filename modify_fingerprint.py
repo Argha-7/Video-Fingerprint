@@ -46,6 +46,7 @@ def get_file_hash(file_path):
 def process_video(video_path, output_video_path):
     abs_video = os.path.abspath(video_path)
     abs_output = os.path.abspath(output_video_path)
+    abs_output_audio = os.path.abspath("modified_audio.mp3")
     temp_orig_audio = os.path.abspath("temp_orig.mp3")
     temp_new_audio = os.path.abspath("temp_new.mp3")
     log_file = os.path.abspath("ffmpeg_log.txt")
@@ -59,22 +60,41 @@ def process_video(video_path, output_video_path):
             orig_hash = get_file_hash(temp_orig_audio)
             print(f"Original Audio Hash: {orig_hash}")
 
-            # 2. Transform and Re-encode
-            print(f"--- Step 2: Modifying Audio & Re-encoding Video ---")
+            # 2. Transform and Re-encode Video with Anti-Copyright Filters
+            print(f"--- Step 2: Modifying Video & Audio (Extreme Bypass) ---")
+            # Stronger Audio Filters:
+            # - atempo=1.05: Speed up
+            # - asetrate=44100*1.005,aresample=44100: Pitch shift
+            # - chorus=0.5:0.9:50:0.4:0.25:2: Subtle chorus
+            # - tremolo=f=3:d=0.1: Subtle volume modulation
+            # - apulsator=hz=0.05:amount=0.03: Digital watermark (phase oscillation)
+            # - firequalizer: High frequency digital noise
+            audio_filters = 'atempo=1.05,asetrate=44100*1.008,aresample=44100,chorus=0.5:0.9:50:0.4:0.25:2,tremolo=f=3:d=0.1,apulsator=hz=0.05:amount=0.03,firequalizer=gain="if(gt(f,15000),rd(1,5),0)"'
+            video_filters = 'scale=iw*1.05:-1,crop=iw/1.05:ih/1.05,eq=brightness=0.02:contrast=1.05'
+            
             transform_cmd = [
                 FFMPEG_PATH, '-y', '-i', abs_video,
-                '-c:v', 'copy',
-                '-af', 'atempo=1.05', # Removed invalid 'noise' filter (it's video only)
+                '-vf', video_filters,
+                '-af', audio_filters,
+                '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '22',
                 '-c:a', 'aac', '-b:a', '128k',
                 abs_output
             ]
             subprocess.run(transform_cmd, check=True, stdout=subprocess.DEVNULL, stderr=f_log)
 
-            # 3. Verify the change
-            print(f"--- Step 3: Verifying Fingerprint Change ---")
-            subprocess.run([FFMPEG_PATH, '-y', '-i', abs_output, '-vn', '-acodec', 'libmp3lame', temp_new_audio], 
-                           check=True, stdout=subprocess.DEVNULL, stderr=f_log)
-            new_hash = get_file_hash(temp_new_audio)
+            # 3. Generate standalone modified MP3 with same extreme bypass
+            print(f"--- Step 3: Generating Modified MP3 ---")
+            audio_cmd = [
+                FFMPEG_PATH, '-y', '-i', abs_video,
+                '-vn', '-af', audio_filters,
+                '-acodec', 'libmp3lame', '-ab', '192k',
+                abs_output_audio
+            ]
+            subprocess.run(audio_cmd, check=True, stdout=subprocess.DEVNULL, stderr=f_log)
+
+            # 4. Verify the change
+            print(f"--- Step 4: Verifying Fingerprint Change ---")
+            new_hash = get_file_hash(abs_output_audio)
             print(f"Modified Audio Hash: {new_hash}")
 
             if orig_hash != new_hash and new_hash != "NOT_FOUND":

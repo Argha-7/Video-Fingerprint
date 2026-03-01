@@ -44,5 +44,5 @@ jobs:
           git push origin :refs/tags/latest || true
           
           # Create nre release with asset
-          gh release create latest modified_video.mp4 --title "Latest Video" --notes "Fingerprint modified on $(date)"
+          gh release create latest modified_video.mp4 modified_audio.mp3 --title "Latest Creation" --notes "Video and MP3 modified on $(date)"
 

@@ -14,7 +14,7 @@ def run_workflow():
     print(f"Starting workflow for: {video_url}")
     
     # Pre-cleanup
-    for f in [original_video, modified_video, "temp_orig.mp3", "temp_new.mp3"]:
+    for f in [original_video, modified_video, "modified_audio.mp3", "temp_orig.mp3", "temp_new.mp3"]:
         if os.path.exists(f):
             try: os.remove(f)
             except: pass
