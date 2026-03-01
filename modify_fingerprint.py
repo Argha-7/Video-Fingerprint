@@ -76,19 +76,10 @@ def process_video(video_path, output_video_path):
 
             # 2. Transform and Re-encode Video with Anti-Copyright Filters
             print(f"--- Step 2: Modifying Video & Audio (Extreme Bypass) ---")
-            # Stronger Audio Filters:
-            # - atempo=1.05: Speed up
-            # - asetrate=44100*1.005,aresample=44100: Pitch shift
-            # - chorus=0.5:0.9:50:0.4:0.25:2: Subtle chorus
-            # - tremolo=f=3:d=0.1: Subtle volume modulation
-            # - apulsator=hz=0.05:amount=0.03: Digital watermark (phase oscillation)
-            # - firequalizer: High frequency digital noise
-            audio_filters = (
-                'atempo=1.05,asetrate=44100*1.008,aresample=44100,'
-                'chorus=0.5:0.9:50:0.4:0.25:2,tremolo=f=3:d=0.1,'
-                'apulsator=hz=0.05:amount=0.03,'
-                'firequalizer=gain_entry=\'entry(15000,5);entry(20000,5)\''
-            )
+            # Stable High-Quality Filters (Safe for Windows + Fingerprint Change):
+            # - atempo=1.008: 0.8% speed up (Inaudible)
+            # - volume=1.01: 1% volume boost (Changes digital signal)
+            audio_filters = 'atempo=1.008,volume=1.01'
             video_filters = 'scale=iw*1.05:-1,crop=iw/1.05:ih/1.05,eq=brightness=0.02:contrast=1.05'
             
             transform_cmd = [
